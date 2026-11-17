@@ -237,7 +237,7 @@ public class TikaInputStream extends TaggedInputStream {
                 public X509Certificate[] getAcceptedIssuers() {
                     return new X509Certificate[0];
                 }
-            }};
+            } };
             try {
                 SSLContext context = SSLContext.getInstance("TLS");
                 context.init(null, trustAll, null);

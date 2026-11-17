@@ -33,6 +33,12 @@ on:
         required: false
         default: false
         type: boolean
+      proof_expectation:
+        description: 'Run controlled proofs with the expected security behavior'
+        required: false
+        default: skip
+        type: choice
+        options: [skip, secure, vulnerable]
 
 permissions:
   contents: read
@@ -93,6 +99,14 @@ jobs:
       - name: Core tests
         id: tests
         run: mvn -B -pl tika-core -am test
+      - name: Controlled security proofs
+        if: github.event_name == 'workflow_dispatch' && inputs.proof_expectation != 'skip'
+        env:
+          EXPECT_VULNERABLE: ${{ inputs.proof_expectation == 'vulnerable' }}
+        run: >-
+          mvn -B -pl tika-core -am -Dtest=Tache3SecurityProofTest
+          -Dsurefire.failIfNoSpecifiedTests=false -Dtache3.demo=true
+          -Dtache3.expectVulnerable="$EXPECT_VULNERABLE" test
       - name: Preserve test reports
         if: always()
         uses: actions/upload-artifact@v4

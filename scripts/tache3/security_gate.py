@@ -11,6 +11,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[2]
+SCANNER = str(Path(sys.executable).with_name("semgrep"))
 MODULES = [
     "tika-core",
     "tika-serialization",
@@ -96,7 +97,7 @@ def main():
         if not args.full:
             base, reason = resolve_baseline(os.environ.get("GITHUB_EVENT_NAME", "local"), event, args.baseline)
             metadata.update(baseline=base, baseline_reason=reason)
-        version = subprocess.check_output(["semgrep", "--version"], text=True).strip()
+        version = subprocess.check_output([SCANNER, "--version"], text=True).strip()
         if version != "1.140.0":
             raise ValueError("Expected Semgrep 1.140.0, got " + version)
         rules = sorted((ROOT / ".semgrep/rules").glob("*.yaml")) + sorted((ROOT / ".semgrep/rules").glob("*.yml"))
@@ -110,7 +111,7 @@ def main():
                 raise ValueError("Missing required scan target: " + target)
         metadata["targets"] = targets
         report_path = output / "semgrep.json"
-        command = ["semgrep", "scan", "--config", ".semgrep/rules", "--strict",
+        command = [SCANNER, "scan", "--config", ".semgrep/rules", "--strict",
                    "--metrics=off", "--disable-version-check", "--disable-nosem",
                    "--no-rewrite-rule-ids", "--json", "--output", str(report_path)]
         if not args.full:

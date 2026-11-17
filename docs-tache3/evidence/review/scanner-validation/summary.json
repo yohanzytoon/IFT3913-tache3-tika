@@ -1,0 +1,106 @@
+{
+  "scope": "Synthetic Java fixtures; real security_gate.py and Semgrep, not mocked",
+  "source_head": "f53c27dcb1c3b0c5a101bb115dea50bb45ed2849",
+  "gate_sha256": "88d5e65510e16cfc8163628dc57761db7073f511de1c47762fe5b28f277e3eea",
+  "cases": [
+    {
+      "name": "clean-change",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 0,
+      "actual_findings": 0,
+      "passed": true,
+      "status": "no_new_findings"
+    },
+    {
+      "name": "new-finding-pr",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "new_findings"
+    },
+    {
+      "name": "before-replacement-full",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "inventory_with_findings"
+    },
+    {
+      "name": "existing-finding-unchanged",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 0,
+      "actual_findings": 0,
+      "passed": true,
+      "status": "no_new_findings"
+    },
+    {
+      "name": "existing-finding-moved",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 0,
+      "actual_findings": 0,
+      "passed": true,
+      "status": "no_new_findings"
+    },
+    {
+      "name": "same-count-new-finding",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "new_findings"
+    },
+    {
+      "name": "after-replacement-full",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "inventory_with_findings"
+    },
+    {
+      "name": "multi-commit-push",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "new_findings"
+    },
+    {
+      "name": "new-branch-push",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "expected_findings": 1,
+      "actual_findings": 1,
+      "passed": true,
+      "status": "new_findings"
+    },
+    {
+      "name": "repaired-against-clean",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "expected_findings": 0,
+      "actual_findings": 0,
+      "passed": true,
+      "status": "no_new_findings"
+    },
+    {
+      "name": "invalid-rules",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "expected_findings": 0,
+      "actual_findings": 0,
+      "passed": true,
+      "status": "scanner_error"
+    }
+  ]
+}

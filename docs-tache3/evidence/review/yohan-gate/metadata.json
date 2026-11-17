@@ -1,0 +1,46 @@
+{
+  "status": "new_findings",
+  "head": "f53c27dcb1c3b0c5a101bb115dea50bb45ed2849",
+  "baseline": "98cef731437f2499dafec8d6190c2d10c88d11e4",
+  "baseline_reason": "explicit",
+  "semgrep": "1.140.0",
+  "mode": "differential",
+  "rules": {
+    "documentbuilderfactory-external-general-entities-true.yaml": "ae92ca7c18863520c16f07ac8be25fc99372d1d0ba2add3f113a3cb023b93f2d",
+    "insecure-trust-manager.yaml": "0358f9341e96202c08e369c4fcd6b567a14882b263b264bacae67011ad41c680",
+    "overly-permissive-file-permission.yaml": "29de19e47e31d254b60e60506b0364022be2a083b833d467398f3a3841f90027"
+  },
+  "targets": [
+    "tika-core/src/main/java",
+    "tika-serialization/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-ocr-module/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-pdf-module/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-microsoft-module/src/main/java"
+  ],
+  "command": [
+    "/Users/youhannazytoon/Documents/IFT3913/.local/tache3-tools/bin/semgrep",
+    "scan",
+    "--config",
+    ".semgrep/rules",
+    "--strict",
+    "--metrics=off",
+    "--disable-version-check",
+    "--disable-nosem",
+    "--no-rewrite-rule-ids",
+    "--json",
+    "--output",
+    "/private/tmp/tache3-branch-review-gate/semgrep.json",
+    "--error",
+    "--baseline-commit",
+    "98cef731437f2499dafec8d6190c2d10c88d11e4",
+    "tika-core/src/main/java",
+    "tika-serialization/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-ocr-module/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-pdf-module/src/main/java",
+    "tika-parsers/tika-parsers-standard/tika-parsers-standard-modules/tika-parser-microsoft-module/src/main/java"
+  ],
+  "scanner_exit_code": 1,
+  "finding_count": 4,
+  "error_count": 0,
+  "gate_exit_code": 1
+}

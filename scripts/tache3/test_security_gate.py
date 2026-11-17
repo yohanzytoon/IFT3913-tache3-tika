@@ -89,6 +89,14 @@ class ResultTests(unittest.TestCase):
     def test_missing_results_fail(self):
         self.assertEqual(2, gate.classify(0, {})[0])
 
+    def test_malformed_json_shapes_fail_as_tooling_errors(self):
+        for report in (None, [], {"results": None}, {"results": [], "errors": "broken"}):
+            with self.subTest(report=report):
+                self.assertEqual((2, "invalid_report"), gate.classify(0, report))
+
+    def test_findings_exit_without_findings_is_a_tooling_error(self):
+        self.assertEqual((2, "inconsistent_exit_code"), gate.classify(1, {"results": []}))
+
 
 if __name__ == "__main__":
     unittest.main()

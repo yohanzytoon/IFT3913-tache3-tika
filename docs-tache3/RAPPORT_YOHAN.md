@@ -12,7 +12,7 @@ Les trois règles existantes sont copiées sans modification depuis le commit `a
 
 ## Workflow et décisions de conception
 
-Le workflow existant [main-jdk17-build.yml](../.github/workflows/main-jdk17-build.yml) est modifié. Le job `security` est obligatoire et son échec rend le workflow rouge. Le job `core-tests` exécute la suite du module modifié. Le build complet hérité dépend des deux jobs et reste disponible avec l'option manuelle `full_build`; il dépend de services externes et n'est pas assimilé aux tests de `tika-core` validés ici.
+Le workflow existant [main-jdk17-build.yml](../.github/workflows/main-jdk17-build.yml) est modifié. Le job `security` est obligatoire et son échec rend le workflow rouge. Le job `core-tests` exécute la suite du module modifié. Le build complet hérité dépend des deux jobs et s'exécute automatiquement sur les pushes et PR lorsqu'ils réussissent. L'option manuelle `full_build`, activée par défaut, permet de le désactiver explicitement pour une démonstration ciblée. Le build complet dépend de services externes et n'est pas assimilé aux tests de `tika-core` validés ici. Les E2E dépendent du build complet.
 
 Les déclencheurs couvrent les PR vers `main`, les pushes sur `main`, `yohan`, `zouhair/**`, `validation/**`, ainsi qu'un lancement manuel. Il n'y a pas d'exclusion des changements de documentation qui masquerait un résultat de contrôle requis. Le checkout utilise le SHA de tête réel des PR et récupère tout l'historique.
 
@@ -70,7 +70,8 @@ La sonde écrit un document synthétique, lit les permissions effectives et vér
 | Suite core sur la source sécurisée | 752 tests, 0 échec, 0 erreur, 2 ignorés |
 | Trois sondes sur la référence sécurisée | 3 tests, 0 échec, 0 erreur |
 | Suite core avec les trois sondes, version vulnérable | 755 tests, 0 échec, 0 erreur, 2 ignorés; Checkstyle validé |
-| Tests unitaires du contrôle CI | 12 réussis : baseline PR, push multiple, nouvelle branche, référence invalide et gestion des résultats/erreurs |
+| Tests unitaires du contrôle CI | 14 réussis après revue : baseline PR, push multiple, nouvelle branche, référence invalide, rapports malformés et gestion des résultats/erreurs |
+| Validation réelle du scanner après revue | 11 vérifications réussies sur fixtures Java isolées, dont déplacement, remplacement à total constant, réparation et règle invalide; détails dans VALIDATION.md |
 | Scan complet avant | 682 fichiers, 3 règles, 0 alerte, 0 erreur |
 | Scan complet après les trois changements | 4 alertes correspondant à 3 types, 0 erreur |
 | Contrôle différentiel après les trois changements | 4 nouvelles alertes, sortie 1 : échec attendu |

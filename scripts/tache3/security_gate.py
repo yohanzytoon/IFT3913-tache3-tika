@@ -68,10 +68,12 @@ def resolve_baseline(event_name, event, explicit=None):
 
 
 def classify(returncode, report):
+    if not isinstance(report, dict):
+        return 2, "invalid_report"
+    if not isinstance(report.get("results"), list) or not isinstance(report.get("errors", []), list):
+        return 2, "invalid_report"
     if returncode not in (0, 1) or report.get("errors"):
         return 2, "scanner_error"
-    if not isinstance(report.get("results"), list):
-        return 2, "invalid_report"
     if returncode == 1 and not report["results"]:
         return 2, "inconsistent_exit_code"
     if report["results"]:
@@ -121,9 +123,12 @@ def main():
         with (output / "semgrep.log").open("w") as log:
             scan = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
         report = json.loads(report_path.read_text())
-        metadata.update(scanner_exit_code=scan.returncode, finding_count=len(report.get("results", [])),
-                        error_count=len(report.get("errors", [])))
         code, status = classify(scan.returncode, report)
+        metadata["scanner_exit_code"] = scan.returncode
+        if isinstance(report, dict):
+            for source, field in (("results", "finding_count"), ("errors", "error_count")):
+                if isinstance(report.get(source), list):
+                    metadata[field] = len(report[source])
         if args.full and code == 1:
             code, status = 0, "inventory_with_findings"
         metadata["status"] = status

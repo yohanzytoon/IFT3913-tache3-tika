@@ -10,8 +10,12 @@ La licence originale est conservée dans `rules/LICENSE`.
 | insecure-trust-manager.yaml | java/lang/security/audit/crypto/ssl/insecure-trust-manager.yaml |
 | overly-permissive-file-permission.yaml | java/lang/security/audit/overly-permissive-file-permission.yaml |
 | documentbuilderfactory-external-general-entities-true.yaml | java/lang/security/audit/xxe/documentbuilderfactory-external-general-entities-true.yaml |
+| command-injection-formatted-runtime-call.yaml | java/lang/security/audit/command-injection-formatted-runtime-call.yaml |
+| object-deserialization.yaml | java/lang/security/audit/object-deserialization.yaml |
+| use-of-md5.yaml | java/lang/security/audit/crypto/use-of-md5.yaml |
+| weak-random.yaml | java/lang/security/audit/crypto/weak-random.yaml |
 
-Ce jeu sera complété pour les quatre types de Zouhair. Le workflow charge tous les fichiers YAML de `rules/`. Les avertissements de sécurité bloquent aussi : aucun filtre de sévérité ne masque les règles WARNING.
+Le jeu contient sept règles, une par type de vulnérabilité. Le workflow charge tous les fichiers YAML de `rules/`. Les avertissements de sécurité bloquent aussi : aucun filtre de sévérité ne masque les règles WARNING.
 
 Les sources Java de production des cinq modules autorisés sont analysées. Les tests de démonstration ne sont pas inclus dans les résultats : ils ne sont pas les vulnérabilités remises.
 

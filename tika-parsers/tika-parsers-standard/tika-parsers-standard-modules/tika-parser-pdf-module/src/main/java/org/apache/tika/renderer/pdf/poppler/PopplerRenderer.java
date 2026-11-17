@@ -21,9 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -138,7 +140,10 @@ public class PopplerRenderer implements Renderer {
             parseContext.set(RenderingTracker.class, tracker);
         }
 
-        Path dir = Files.createTempDirectory("tika-render-");
+        // Short, readable directory name for pdftoppm output.
+        Path dir = Paths.get(System.getProperty("java.io.tmpdir"),
+                "tika-render-" + Integer.toHexString(new Random().nextInt()));
+        Files.createDirectories(dir);
         tmp.addResource(new Closeable() {
             @Override
             public void close() throws IOException {

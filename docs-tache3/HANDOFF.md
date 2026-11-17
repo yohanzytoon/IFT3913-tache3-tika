@@ -13,7 +13,7 @@ La partie de Yohan comprend le dépôt et sa référence, le contrôle Semgrep d
 ```sh
 git clone https://github.com/yohanzytoon/IFT3913-tache3-tika.git
 cd IFT3913-tache3-tika
-git switch -c zouhair/vulnerabilities origin/yohan/vulnerabilities
+git switch -c zouhair/vulnerabilities origin/yohan
 ```
 
 Ajoute les règles existantes nécessaires dans `.semgrep/rules/` avec leur source exacte et licence, puis vérifie leur comportement. Le workflow inclut automatiquement les YAML supplémentaires et analyse les cinq modules permis. Une alerte héritée ne compte pas comme une nouvelle vulnérabilité.

@@ -4,7 +4,7 @@ Cette partie couvre la préparation du dépôt, le contrôle Semgrep du workflow
 
 ## État de référence et reproductibilité
 
-Le dépôt conserve l'historique du cas d'étude Tika. Source : commit `526f3a09dd596d5456d4dd079804aba7a57e6af5` de notre [dépôt Tâche 2](https://github.com/yohanzytoon/IFT3913-tache2-tika/commit/526f3a09dd596d5456d4dd079804aba7a57e6af5). La branche `main` garde le code sécurisé. La branche `yohan/vulnerabilities` contient les modifications délibérément vulnérables. Le tag `tache3-clean`, SHA `98cef731437f2499dafec8d6190c2d10c88d11e4`, conserve le code sécurisé, le workflow, les règles et les trois sondes.
+Le dépôt conserve l'historique du cas d'étude Tika. Source : commit `526f3a09dd596d5456d4dd079804aba7a57e6af5` de notre [dépôt Tâche 2](https://github.com/yohanzytoon/IFT3913-tache2-tika/commit/526f3a09dd596d5456d4dd079804aba7a57e6af5). La branche `main` garde le code sécurisé. La branche `yohan` contient les modifications délibérément vulnérables. Le tag `tache3-clean`, SHA `98cef731437f2499dafec8d6190c2d10c88d11e4`, conserve le code sécurisé, le workflow, les règles et les trois sondes.
 
 Environnement local vérifié : macOS arm64, OpenJDK 17.0.18, Maven 3.10.0, Python 3.11, Semgrep 1.140.0. Le fichier [requirements.txt](../.semgrep/requirements.txt) fixe également les dépendances Python : la résolution initiale choisissait Pydantic 2.14.3, incompatible avec le composant MCP de cette version de Semgrep; Pydantic 2.11.9 a été testé avec succès. `pip check` ne signale aucune incompatibilité.
 
@@ -14,7 +14,7 @@ Les trois règles existantes sont copiées sans modification depuis le commit `a
 
 Le workflow existant [main-jdk17-build.yml](../.github/workflows/main-jdk17-build.yml) est modifié. Le job `security` est obligatoire et son échec rend le workflow rouge. Le job `core-tests` exécute la suite du module modifié. Le build complet hérité dépend des deux jobs et reste disponible avec l'option manuelle `full_build`; il dépend de services externes et n'est pas assimilé aux tests de `tika-core` validés ici.
 
-Les déclencheurs couvrent les PR vers `main`, les pushes sur `main`, `yohan/**`, `zouhair/**`, `validation/**`, ainsi qu'un lancement manuel. Il n'y a pas d'exclusion des changements de documentation qui masquerait un résultat de contrôle requis. Le checkout utilise le SHA de tête réel des PR et récupère tout l'historique.
+Les déclencheurs couvrent les PR vers `main`, les pushes sur `main`, `yohan`, `zouhair/**`, `validation/**`, ainsi qu'un lancement manuel. Il n'y a pas d'exclusion des changements de documentation qui masquerait un résultat de contrôle requis. Le checkout utilise le SHA de tête réel des PR et récupère tout l'historique.
 
 Le script [security_gate.py](../scripts/tache3/security_gate.py) choisit la référence ainsi :
 
@@ -97,7 +97,7 @@ mvn -B -pl tika-core -am -Dtest=Tache3SecurityProofTest \
   -Dsurefire.failIfNoSpecifiedTests=false -Dtache3.demo=true test
 
 # Branche de démonstration : trois comportements vulnérables attendus.
-git switch yohan/vulnerabilities
+git switch yohan
 mvn -B -pl tika-core -am -Dtache3.demo=true -Dtache3.expectVulnerable=true test
 ```
 

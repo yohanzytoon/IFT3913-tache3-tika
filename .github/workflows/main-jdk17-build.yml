@@ -21,7 +21,7 @@ on:
   pull_request:
     branches: [ main ]
   push:
-    branches: [ main, 'yohan/**', 'zouhair/**', 'validation/**' ]
+    branches: [ main, 'yohan', 'zouhair/**', 'validation/**' ]
   workflow_dispatch:
     inputs:
       baseline:

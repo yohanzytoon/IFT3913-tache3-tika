@@ -24,14 +24,16 @@ Yohan : contrôle Semgrep, XXE (CWE-611), validation TLS désactivée (CWE-295) 
 
 ## Vérifications locales du 16 novembre 2026 (Montréal)
 
-| Vérification | Résultat | Preuve |
-|---|---|---|
-| Branche `main` sécurisée `abe046c26`, comparée à `tache3-clean` | 0 nouvelle alerte, sortie 0 | [clean-gate](evidence/review/clean-gate/metadata.json) |
-| Branche `yohan` `f53c27dcb`, comparée à `tache3-clean` | 4 nouvelles alertes, 0 erreur, sortie 1 | [yohan-gate](evidence/review/yohan-gate/metadata.json) |
-| Contrôle Python après durcissement des rapports invalides | 14 tests réussis | [unit-tests.log](evidence/review/unit-tests.log) |
-| Vraies analyses Semgrep sur dépôt temporaire | 11 vérifications réussies | [scanner-validation/summary.json](evidence/review/scanner-validation/summary.json) |
+| Vérification | Résultat observé |
+|---|---|
+| Branche `main` sécurisée `abe046c26`, comparée à `tache3-clean` | 0 nouvelle alerte, sortie 0 |
+| Branche `yohan` `f53c27dcb`, comparée à `tache3-clean` | 4 nouvelles alertes, 0 erreur, sortie 1 |
+| Contrôle Python après durcissement des rapports invalides | 14 tests réussis |
+| Vraies analyses Semgrep sur dépôt temporaire | 11 vérifications réussies |
 
-Les onze vérifications utilisent le vrai script de contrôle et Semgrep 1.140.0 avec les mêmes règles, sur de petits fichiers Java synthétiques committés dans un dépôt jetable. Ce sont des tests du contrôle, pas des preuves supplémentaires d'exploitation dans Tika. Chaque répertoire contient les références Git, les empreintes des règles, le rapport JSON et les journaux. Les commits temporaires ne sont pas des commits publiés du projet.
+Les onze vérifications utilisent le vrai script de contrôle et Semgrep 1.140.0 avec les mêmes règles, sur de petits fichiers Java synthétiques committés dans un dépôt jetable. Ce sont des tests du contrôle, pas des preuves supplémentaires d'exploitation dans Tika. Les commandes ci-dessous permettent de les reproduire; leurs rapports détaillés sont générés hors du dépôt et téléversés comme artefacts par la CI. Les copies des journaux de revue ne sont pas conservées dans l'arbre courant pour éviter les doublons. Les commits temporaires ne sont pas des commits publiés du projet.
+
+Les preuves originales nécessaires à la comparaison des vulnérabilités restent versionnées : [scan complet avant](evidence/before-full/semgrep.json), [scan complet après](evidence/yohan-full/semgrep.json) et [nouvelles alertes](evidence/yohan-new/semgrep.json), avec leurs métadonnées et journaux.
 
 | Scénario | Observation |
 |---|---|

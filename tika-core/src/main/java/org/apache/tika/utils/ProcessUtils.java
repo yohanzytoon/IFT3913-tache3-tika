@@ -253,7 +253,10 @@ public class ProcessUtils {
 
         Process process = null;
         try {
-            process = Runtime.getRuntime().exec(checkCmd);
+            // Run the check through the shell so that callers can pass a
+            // complete command line (environment expansion, quoting, etc.).
+            process = java.lang.Runtime.getRuntime().exec(
+                    new String[]{"sh", "-c", String.join(" ", checkCmd)});
             StreamGobbler outGobbler = new StreamGobbler(process.getInputStream(), 0);
             StreamGobbler errGobbler = new StreamGobbler(process.getErrorStream(), 0);
             Thread outThread = new Thread(outGobbler);

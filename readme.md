@@ -150,6 +150,8 @@ Les deux analyses utilisent **exactement** le même moteur (Semgrep 1.140.0), le
 
 Dans les deux cas : 682 fichiers analysés, 0 erreur. Les huit alertes sont toutes nouvelles, puisque la version avant n'en contient aucune.
 
+Sur GitHub, le contrôle différentiel confirme ce résultat : l'[exécution sur `zouhair/vulnerabilities`](https://github.com/yohanzytoon/IFT3913-tache3-tika/actions/runs/44176565744) se termine avec `Semgrep: new_findings; 8 finding(s); exit 1`, donc rouge comme attendu, tandis que les tests de `tika-core` y réussissent.
+
 Commande utilisée, identique pour les deux versions (exécutée localement sur Windows 11, Python 3.11) :
 
 ```sh
@@ -172,7 +174,7 @@ Toutes les nouvelles vulnérabilités compilent : `tika-core`, `tika-serializati
 
 **Validation :**
 - Localement, sur trois jeux de rapports : test en échec ou en erreur (rickroll, `failed-tests=2`), tests réussis ou ignorés (pas de rickroll), aucun rapport (pas de rickroll).
-- Sur GitHub, branche [`validation/rickroll`](https://github.com/yohanzytoon/IFT3913-tache3-tika/tree/validation/rickroll), créée depuis `tache3-clean` pour que le contrôle de sécurité ne bloque pas la démonstration. Le commit [`bf6405d65`](https://github.com/yohanzytoon/IFT3913-tache3-tika/commit/bf6405d65) ajoute un test JUnit qui échoue volontairement (`RickrollDemoTest`) : [exécution rouge avec rickroll](LIEN_RUN_ROUGE). Ce test est ensuite retiré : [exécution verte](LIEN_RUN_VERT).
+- Sur GitHub, branche [`validation/rickroll`](https://github.com/yohanzytoon/IFT3913-tache3-tika/tree/validation/rickroll), créée depuis `tache3-clean` pour que le contrôle de sécurité ne bloque pas la démonstration. Le commit [`bf6405d65`](https://github.com/yohanzytoon/IFT3913-tache3-tika/commit/bf6405d65) ajoute un test JUnit qui échoue volontairement (`RickrollDemoTest`) : [exécution rouge avec rickroll](https://github.com/yohanzytoon/IFT3913-tache3-tika/actions/runs/44176570157). Le commit [`de62706b5`](https://github.com/yohanzytoon/IFT3913-tache3-tika/commit/de62706b5) retire ensuite ce test : [exécution verte](https://github.com/yohanzytoon/IFT3913-tache3-tika/actions/runs/44176950034).
 
 ## Validation locale obtenue
 

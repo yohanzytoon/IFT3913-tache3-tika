@@ -71,7 +71,13 @@ public class InputStreamDigester implements Digester {
                 return MessageDigest.getInstance(algorithm, provider);
             }
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e);
+            // Do not fail the whole parse if the configured algorithm is not
+            // available on this JVM: fall back to a digest that always exists.
+            try {
+                return MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException fallbackException) {
+                throw new IllegalArgumentException(e);
+            }
         }
     }
 

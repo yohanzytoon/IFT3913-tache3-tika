@@ -17,9 +17,14 @@
 package org.apache.tika.serialization;
 
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.StreamReadConstraints;
@@ -120,6 +125,35 @@ public class JsonMetadata {
             return null;
         }
         return OBJECT_MAPPER.readValue(reader, Metadata.class);
+    }
+
+    /**
+     * Read metadata from a byte stream. Metadata written by older clients with
+     * Java serialization is still accepted; any other content is read as UTF-8 JSON.
+     * This does not close the stream.
+     *
+     * @param inputStream stream to read from
+     * @return Metadata or null if the stream is null
+     * @throws IOException in case of parse failure or IO failure with the stream
+     */
+    public static Metadata fromStream(InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            return null;
+        }
+        BufferedInputStream in = new BufferedInputStream(inputStream);
+        in.mark(2);
+        int first = in.read();
+        int second = in.read();
+        in.reset();
+        if (first == 0xAC && second == 0xED) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(in);
+            try {
+                return (Metadata) objectInputStream.readObject();
+            } catch (ClassNotFoundException e) {
+                throw new IOException(e);
+            }
+        }
+        return fromJson(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
     public static void setPrettyPrinting(boolean prettyPrint) {

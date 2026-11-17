@@ -256,12 +256,18 @@ public class XMLReaderUtils implements Serializable {
             LOG.debug("DocumentBuilderFactory class {}", factory.getClass());
         }
 
-        factory.setExpandEntityReferences(false);
+        // Tâche 3 demonstration: deliberately expose external file entities.
+        factory.setExpandEntityReferences(true);
         factory.setNamespaceAware(true);
         factory.setValidating(false);
 
         trySetSAXFeature(factory, XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        trySetSAXFeature(factory, "http://xml.org/sax/features/external-general-entities", false);
+        try {
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", true);
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("Cannot configure demonstration DOM factory", e);
+        }
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "file");
         trySetSAXFeature(factory, "http://xml.org/sax/features/external-parameter-entities", false);
         trySetSAXFeature(factory, "http://apache.org/xml/features/nonvalidating/load-external-dtd",
                 false);

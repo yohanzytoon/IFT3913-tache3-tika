@@ -1,0 +1,33 @@
+name: Rickroll on test failure
+description: >-
+  Reads Surefire XML reports and rickrolls the run when at least one JUnit test
+  case failed. Compilation or dependency errors (no failing test case in the
+  reports) are not rickrolled. The action never turns a red job green.
+
+inputs:
+  reports-glob:
+    description: Glob pattern of the Surefire XML reports to inspect
+    required: false
+    default: '**/target/surefire-reports/TEST-*.xml'
+  video-url:
+    description: The video every failing build deserves
+    required: false
+    default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+
+outputs:
+  rickrolled:
+    description: "'true' if at least one failing test case was found and the run was rickrolled"
+    value: ${{ steps.rickroll.outputs.rickrolled }}
+  failed-tests:
+    description: Number of failing or erroring JUnit test cases found in the reports
+    value: ${{ steps.rickroll.outputs.failed-tests }}
+
+runs:
+  using: composite
+  steps:
+    - id: rickroll
+      shell: bash
+      env:
+        REPORTS_GLOB: ${{ inputs.reports-glob }}
+        VIDEO_URL: ${{ inputs.video-url }}
+      run: python3 "$GITHUB_ACTION_PATH/rickroll.py"

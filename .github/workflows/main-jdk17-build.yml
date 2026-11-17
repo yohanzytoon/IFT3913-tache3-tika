@@ -107,6 +107,11 @@ jobs:
       - name: Core tests
         id: tests
         run: mvn -B -pl tika-core -am test
+      # Humour: rickroll only when the test step itself failed; the action reads
+      # the Surefire reports to ignore compilation/dependency failures. The job stays red.
+      - name: Rickroll on test failure
+        if: failure() && steps.tests.outcome == 'failure'
+        uses: ./.github/actions/rickroll
       - name: Controlled security proofs
         if: github.event_name == 'workflow_dispatch' && inputs.proof_expectation != 'skip'
         env:

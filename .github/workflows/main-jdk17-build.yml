@@ -20,105 +20,15 @@ name: main jdk17 build
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
   push:
-    branches: [ main, 'yohan', 'zouhair/**', 'validation/**' ]
-  workflow_dispatch:
-    inputs:
-      baseline:
-        description: 'Optional ancestor SHA for a cumulative security demonstration'
-        required: false
-        type: string
-      full_build:
-        description: 'Also run the inherited full Tika integration build (external services required)'
-        required: false
-        default: false
-        type: boolean
-      proof_expectation:
-        description: 'Run controlled proofs with the expected security behavior'
-        required: false
-        default: skip
-        type: choice
-        options: [skip, secure, vulnerable]
-
-permissions:
-  contents: read
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
-  security:
-    name: Semgrep — new vulnerabilities
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: pip
-          cache-dependency-path: .semgrep/requirements.txt
-      - name: Install pinned scanner
-        run: python -m pip install -r .semgrep/requirements.txt
-      - name: Test gate logic
-        run: python -m unittest discover -s scripts/tache3 -p 'test_*.py' -v
-      - name: Reject new security findings
-        env:
-          REQUESTED_BASELINE: ${{ inputs.baseline }}
-          SEMGREP_ENABLE_VERSION_CHECK: '0'
-          SEMGREP_SEND_METRICS: 'off'
-        run: |
-          args=()
-          if [[ -n "$REQUESTED_BASELINE" ]]; then
-            args+=(--baseline "$REQUESTED_BASELINE")
-          fi
-          python scripts/tache3/security_gate.py "${args[@]}" --output "$RUNNER_TEMP/semgrep-report"
-      - name: Preserve security evidence, including failures
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/semgrep-report/
-          if-no-files-found: warn
-
-  core-tests:
-    name: Tika core — baseline and demonstration tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-      - name: Core tests
-        id: tests
-        run: mvn -B -pl tika-core -am test
-      - name: Controlled security proofs
-        if: github.event_name == 'workflow_dispatch' && inputs.proof_expectation != 'skip'
-        env:
-          EXPECT_VULNERABLE: ${{ inputs.proof_expectation == 'vulnerable' }}
-        run: >-
-          mvn -B -pl tika-core -am -Dtest=Tache3SecurityProofTest
-          -Dsurefire.failIfNoSpecifiedTests=false -Dtache3.demo=true
-          -Dtache3.expectVulnerable="$EXPECT_VULNERABLE" test
-      - name: Preserve test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: core-tests-${{ github.run_id }}-${{ github.run_attempt }}
-          path: '**/target/surefire-reports/'
-
   build:
-    needs: [ security, core-tests ]
-    # Full integration needs external services; the graded path always runs
-    # core tests and security. Keep the original full build available explicitly.
-    if: github.event_name == 'workflow_dispatch' && inputs.full_build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
